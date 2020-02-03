@@ -14,7 +14,7 @@ class CommonApp(App):
         return "%s/%s" % (install_dir, self.app_name)
 
     def start(self):
-        os.system("%s/bin/startup.sh" % self._get_install_path())
+        os.system("%s/bin/startup.sh &" % self._get_install_path())
         logging.info("%s 启动" % self.app_name)
 
     def stop(self):

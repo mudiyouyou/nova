@@ -53,4 +53,4 @@ def show_log(app_name, before_lines=100):
 
 def list_app():
     for app in app_service.list_app():
-        logging.info("名称:%-30s CPU:%-10s 内存:%-10s" % (app.app_name, app.cpu, app.memory))
+        logging.info("PID:%-10s 名称:%-30s CPU:%-10s 内存:%-10s" % (app.pid, app.app_name, app.cpu, app.memory))

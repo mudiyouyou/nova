@@ -85,3 +85,8 @@ class App(object):
         if self.process is not None:
             return str(round(self.process.memory_info().rss / 1024 / 1024, 0)) + "(MB)"
         return "0"
+
+    @property
+    def pid(self):
+        if self.process is not None:
+            return self.process.pid()
