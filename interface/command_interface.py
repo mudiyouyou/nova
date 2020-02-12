@@ -12,7 +12,7 @@ nova list_app 显示所有运行时Java程序
 """
 import sys
 import logging
-from application.service import nova_service
+from application.service import app_service
 
 
 def command():
@@ -36,7 +36,7 @@ def start(params):
     命令格式:start 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.start(params[0])
+        app_service.start(params[0])
     else:
         logging.info(__doc__)
 
@@ -48,7 +48,7 @@ def stop(params):
     命令格式:stop 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.stop(params[0])
+        app_service.stop(params[0])
     else:
         logging.info(__doc__)
 
@@ -60,7 +60,7 @@ def install(params):
     命令格式:install 程序安装目录名称 安装程序包(.war  .tar.gz)
     """
     if len(params) == 2:
-        nova_service.install(params[0], params[1])
+        app_service.install(params[0], params[1])
     else:
         logging.info(install.__doc__)
 
@@ -72,7 +72,7 @@ def backup(params):
     命令格式:backup 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.backup(params[0])
+        app_service.backup(params[0])
     else:
         logging.info(backup.__doc__)
 
@@ -84,7 +84,7 @@ def rollback(params):
     命令格式:rollback 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.rollback(params[0])
+        app_service.rollback(params[0])
     else:
         logging.info(rollback.__doc__)
 
@@ -95,21 +95,17 @@ def uninstall(params):
     命令格式:uninstall 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.uninstall(params[0])
+        app_service.uninstall(params[0])
     else:
         logging.info(uninstall.__doc__)
 
 
 def log(params):
     """
-    打印程序最后N行日志，N默认为100
-    命令格式:log 程序安装目录名称 行数
+    命令格式:log 程序安装目录名称
     """
     if len(params) == 1:
-        nova_service.show_log(params[0])
-        return
-    if len(params) == 2:
-        nova_service.show_log(params[0], params[1])
+        app_service.get_tail_of_log(params[0]).start()
         return
     else:
         logging.info(log.__doc__)
@@ -123,6 +119,6 @@ def list_app(params):
     命令格式:list_app
     """
     try:
-        nova_service.list_app()
+        app_service.list_app()
     except RuntimeError:
         logging.info(list_app.__doc__)

@@ -1,9 +1,11 @@
 # coding=utf-8
-from datetime import datetime
+import logging
 import os
 import shutil
-import logging
+from datetime import datetime
+
 from infrastucture.setting import backup_dir, install_dir, log_dir
+from tail import Tail, TailError
 
 
 class App(object):
@@ -58,18 +60,16 @@ class App(object):
         # 拷贝备份程序到程序目录
         logging.info("%s 已回滚" % self.app_name)
 
-    def show_log(self, before_lines):
+    def get_tail_of_log(self):
         date_str = datetime.now().strftime("%Y-%m-%d")
         log_file = self.app_name + "-" + date_str + ".log"
         log_file_path = "%s/%s/%s" % (log_dir, self.app_name, log_file)
         if os.path.exists(log_file_path):
-            os.system("tail -%sf %s" % (before_lines, log_file_path))
-            return
+            return Tail(log_file_path)
         log_file_path = "%s/%s/%s" % (log_dir, self.app_name, "log_info.log")
         if os.path.exists(log_file_path):
-            os.system("tail -%sf %s" % (before_lines, log_file_path))
-            return
-        logging.info("没有找到日志文件")
+            return Tail(log_file_path)
+        raise TailError("没有找到日志文件")
 
     def _get_install_path(self):
         pass
@@ -90,3 +90,14 @@ class App(object):
     def pid(self):
         if self.process is not None:
             return self.process.pid()
+
+
+if __name__ == '__main__':
+    app = App("wireless-payment")
+    tail = app.get_tail_of_log()
+    import sys
+    tail.register_callback(lambda x:sys.stdout.write(x))
+    tail.start()
+    import time
+    time.sleep(5)
+    tail.stop()

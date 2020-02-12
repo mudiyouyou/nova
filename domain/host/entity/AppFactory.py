@@ -1,8 +1,8 @@
 # coding=utf-8
 import os
 
-from domain.app.entity.CommonApp import CommonApp
-from domain.app.entity.TomcatApp import TomcatApp
+from domain.host.entity.CommonApp import CommonApp
+from domain.host.entity.TomcatApp import TomcatApp
 from infrastucture.setting import *
 
 

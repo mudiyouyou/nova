@@ -1,24 +1,26 @@
 # coding=utf-8
-import shutil
+import os
+import stat
 import logging
-from domain.app.entity.App import App
+from domain.host.entity.App import App
 from infrastucture.setting import *
 
 
-class TomcatApp(App):
+class CommonApp(App):
     def __init__(self, app_name):
         super().__init__(app_name)
-        self.tomcat_path = "%s/%s/%s" % (install_dir, self.app_name, tomcat_dir)
 
     def _get_install_path(self):
-        return "%s/webapps" % self.tomcat_path
+        return "%s/%s" % (install_dir, self.app_name)
 
     def start(self):
-        os.system("%s/bin/startup.sh" % self.tomcat_path)
+        os.chdir("%s/bin" % self._get_install_path())
+        os.system("./startup.sh &")
         logging.info("%s 启动" % self.app_name)
 
     def stop(self):
-        os.system("%s/bin/shutdown.sh" % self.tomcat_path)
+        os.chdir("%s/bin" % self._get_install_path())
+        os.system("./shutdown.sh")
         logging.info("%s 停止" % self.app_name)
 
     def install(self, install_file):
@@ -27,9 +29,11 @@ class TomcatApp(App):
             return
         if install_file[0:2] == "./":
             install_file = install_file[2:]
-        shutil.copy(install_dir + os.sep + install_file, self._get_install_path() + os.sep)
+        os.system("tar xvf %s -C %s" % (install_dir + os.sep + install_file, install_dir))
+        os.chmod("%s/bin/startup.sh" % self._get_install_path(), stat.S_IRWXU)
+        os.chmod("%s/bin/shutdown.sh" % self._get_install_path(), stat.S_IRWXU)
         logging.info("%s 已安装" % self.app_name)
 
     def uninstall(self):
-        os.system("rm -rf %s/*" % self._get_install_path())
+        os.system("rm -rf %s" % self._get_install_path())
         logging.info("%s 已卸载" % self.app_name)
