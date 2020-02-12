@@ -1,0 +1,5 @@
+install_dir=/Users/mudi/Coding/workspace-python/nova/test
+backup_dir=/Users/mudi/Coding/workspace-python/nova/test/backup
+tomcat_dir=apache-tomcat-7.0.92
+log_dir=/Users/mudi/Coding/workspace-python/nova/test/logs
+zoo_server=127.0.0.1:2181
