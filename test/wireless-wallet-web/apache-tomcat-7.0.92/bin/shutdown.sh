@@ -1,2 +1,2 @@
 # !/bin/sh
-echo 'Stop tomcat'
+jps|grep wireless-wallet-web|awk '{print $1}'|xargs kill -9

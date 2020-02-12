@@ -1,2 +1,2 @@
 # !/bin/sh
-echo 'Start tomcat'
+java -jar ../wireless-wallet-web.jar > /dev/null &
